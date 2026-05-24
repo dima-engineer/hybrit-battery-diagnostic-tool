@@ -15,6 +15,7 @@ export interface AppState {
   socMin:      number;
   socMax:      number;
   sortBars:    boolean;
+  sortHeatByCurrent: boolean;
 }
 
 export const state: AppState = {
@@ -32,6 +33,7 @@ export const state: AppState = {
   socMin:      0,
   socMax:      0,
   sortBars:    false,
+  sortHeatByCurrent: false,
 };
 
 export const STEPS         = 2000;

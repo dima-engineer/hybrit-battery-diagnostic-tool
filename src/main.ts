@@ -14,6 +14,14 @@ document.getElementById('sortBtn')!.addEventListener('click', () => {
   if (state.allRows.length) render();
 });
 
+document.getElementById('sortHeatBtn')!.addEventListener('click', () => {
+  state.sortHeatByCurrent = !state.sortHeatByCurrent;
+  const btn = document.getElementById('sortHeatBtn')!;
+  btn.classList.toggle('on', state.sortHeatByCurrent);
+  btn.textContent = state.sortHeatByCurrent ? 'Chronological order' : 'Sort by current ↑';
+  if (state.allRows.length) render();
+});
+
 new ResizeObserver(() => {
   if (state.allRows.length) render();
 }).observe(document.querySelector('.wrap')!);

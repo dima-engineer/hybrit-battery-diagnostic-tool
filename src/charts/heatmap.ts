@@ -10,14 +10,18 @@ export function drawHeatmap(rows: Row[]): void {
   if (!rows.length || !nC) { show(empty); hide(canvas); return; }
   hide(empty); show(canvas);
 
+  const sorted = state.sortHeatByCurrent
+    ? [...rows].sort((a, b) => toNum(a[state.curCol]) - toNum(b[state.curCol]))
+    : rows;
+
   // Aggregate rows into at most MAX_HEAT_ROWS visual rows
-  let disp: Row[] = rows;
-  if (rows.length > MAX_HEAT_ROWS) {
+  let disp: Row[] = sorted;
+  if (sorted.length > MAX_HEAT_ROWS) {
     disp = [];
-    const bsz = rows.length / MAX_HEAT_ROWS;
+    const bsz = sorted.length / MAX_HEAT_ROWS;
     for (let i = 0; i < MAX_HEAT_ROWS; i++) {
       const s = Math.round(i * bsz), e = Math.round((i + 1) * bsz);
-      const bucket = rows.slice(s, e);
+      const bucket = sorted.slice(s, e);
       const agg: Row = { [state.curCol]: mean(bucket.map(r => toNum(r[state.curCol]))) };
       state.voltageCols.forEach(c => { agg[c] = mean(bucket.map(r => toNum(r[c]))); });
       disp.push(agg);

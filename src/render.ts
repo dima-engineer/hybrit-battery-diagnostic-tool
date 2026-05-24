@@ -1,6 +1,7 @@
 import { state, type Row } from './state.js';
 import { drawHeatmap } from './charts/heatmap.js';
 import { drawBar }     from './charts/bar.js';
+import { drawPairs }   from './charts/pairs.js';
 
 export function filteredRows(): Row[] {
   return state.allRows.filter(r => {
@@ -19,4 +20,5 @@ export function render(): void {
   document.getElementById('sampleBadge')!.textContent = `${rows.length} samples`;
   drawHeatmap(rows);
   drawBar(rows);
+  drawPairs(rows);
 }

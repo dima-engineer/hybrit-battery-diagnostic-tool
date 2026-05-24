@@ -82,7 +82,7 @@ export function buildFilter(): void {
     hide('socFilterRow');
   }
 
-  show('filterCard'); show('heatCard'); show('barCard');
+  show('filterCard'); show('heatCard'); show('pairsCard'); show('barCard');
   render();
 }
 

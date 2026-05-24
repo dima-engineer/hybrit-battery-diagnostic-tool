@@ -87,10 +87,22 @@
   <div class="card hidden" id="heatCard">
     <div class="card-head">
       <span class="card-head-l">📊 Cell Voltage Deviation from Per-Sample Mean</span>
+      <button class="btn btn-ghost" id="sortHeatBtn">Sort by current ↑</button>
     </div>
     <div class="chart-wrap">
       <div class="no-data hidden" id="heatEmpty">No samples in selected range.</div>
       <canvas id="heatCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Pair delta chart -->
+  <div class="card hidden" id="pairsCard">
+    <div class="card-head">
+      <span class="card-head-l">⚡ Block Pair Voltage Difference</span>
+    </div>
+    <div class="chart-wrap">
+      <div class="no-data hidden" id="pairsEmpty">Need at least 2 voltage columns selected.</div>
+      <canvas id="pairsCanvas"></canvas>
     </div>
   </div>
 

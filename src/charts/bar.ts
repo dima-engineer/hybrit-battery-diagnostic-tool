@@ -22,12 +22,6 @@ export function drawBar(rows: Row[]): void {
     return { col: c, name: c.match(/V\d+/i)?.[0] ?? c, mean: m, std: s };
   });
 
-  // Reference line: mean across the entire unfiltered dataset
-  const overallMean: number[] = state.voltageCols.map(c => {
-    const vals = state.allRows.map(r => toNum(r[c])).filter(isFinite);
-    return mean(vals);
-  });
-
   if (state.sortBars) cells = [...cells].sort((a, b) => a.mean - b.mean);
 
   const dpr = window.devicePixelRatio || 1;
@@ -38,12 +32,12 @@ export function drawBar(rows: Row[]): void {
   const ctx = canvas.getContext('2d')!;
   ctx.scale(dpr, dpr);
 
-  const ML = 64, MR = 24, MT = 28, MB = 46;
+  const ML = 64, MR = 24, MT = 16, MB = 46;
   const plotW = W - ML - MR;
   const plotH = H - MT - MB;
 
-  // Y scale covers filtered means ± std and the overall mean line
-  const ys  = [...cells.flatMap(c => [c.mean - c.std, c.mean + c.std]), ...overallMean];
+  // Y scale covers filtered means ± std
+  const ys  = cells.flatMap(c => [c.mean - c.std, c.mean + c.std]);
   const yLo = Math.min(...ys), yHi = Math.max(...ys);
   const pad = (yHi - yLo) * 0.14 || 0.05;
   const vLo = yLo - pad, vHi = yHi + pad;
@@ -69,20 +63,6 @@ export function drawBar(rows: Row[]): void {
   const barW = plotW / nC;
   const bPad = Math.max(barW * 0.18, 3);
   const yBot = toY(vLo);
-
-  // Overall mean — dashed orange line, follows sort order
-  ctx.save();
-  ctx.setLineDash([5, 4]);
-  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
-  ctx.beginPath();
-  cells.forEach(({ col }, i) => {
-    const oi = state.voltageCols.indexOf(col);
-    const x  = ML + (i + 0.5) * barW;
-    const y  = toY(overallMean[oi]);
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
-  ctx.stroke();
-  ctx.restore();
 
   // Bars + error bars
   cells.forEach(({ name, mean: m, std: s }, i) => {
@@ -118,16 +98,4 @@ export function drawBar(rows: Row[]): void {
   ctx.fillText('Voltage [V]', 0, 0);
   ctx.restore();
 
-  // Legend
-  const lx = ML + 8, ly = MT + 6;
-  ctx.fillStyle = 'rgba(59,130,246,.72)';
-  ctx.fillRect(lx, ly, 14, 10);
-  ctx.fillStyle = '#475569'; ctx.font = '11px system-ui'; ctx.textAlign = 'left';
-  ctx.fillText('Filtered mean ± std', lx + 18, ly + 9);
-
-  ctx.save();
-  ctx.setLineDash([5, 4]); ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(lx, ly + 22); ctx.lineTo(lx + 14, ly + 22); ctx.stroke();
-  ctx.restore();
-  ctx.fillText('Overall mean (all data)', lx + 18, ly + 26);
 }
