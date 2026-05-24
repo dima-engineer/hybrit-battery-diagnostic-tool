@@ -145,6 +145,7 @@ select {
 
 /* Range slider */
 .filter-row { display: flex; align-items: center; gap: 16px; }
+.filter-row + .filter-row { margin-top: 10px; }
 .range-wrap {
   flex: 1;
   position: relative;

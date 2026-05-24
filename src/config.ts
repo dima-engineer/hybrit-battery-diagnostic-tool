@@ -6,6 +6,7 @@ function applyConfig(): void {
   state.voltageCols = [...document.querySelectorAll<HTMLInputElement>('#voltageList input:checked')]
     .map(cb => cb.value);
   state.curCol = (document.getElementById('currentSel') as HTMLSelectElement).value;
+  state.socCol = (document.getElementById('socSel')     as HTMLSelectElement).value;
   if (!state.voltageCols.length || !state.curCol) return;
   buildFilter();
 }
@@ -13,6 +14,7 @@ function applyConfig(): void {
 export function buildConfig(): void {
   const volGuess = state.columns.filter(c => /vol/i.test(c) && !/(max|min|pack)/i.test(c));
   const curGuess = state.columns.find(c => /current/i.test(c)) ?? state.columns[0];
+  const socGuess = state.columns.find(c => /charge|soc/i.test(c)) ?? '';
 
   const list = document.getElementById('voltageList')!;
   list.innerHTML = '';
@@ -30,10 +32,16 @@ export function buildConfig(): void {
     .map(c => `<option value="${c}"${c === curGuess ? ' selected' : ''}>${c}</option>`)
     .join('');
 
+  const socSel = document.getElementById('socSel') as HTMLSelectElement;
+  socSel.innerHTML = ['<option value="">— none —</option>', ...state.columns
+    .map(c => `<option value="${c}"${c === socGuess ? ' selected' : ''}>${c}</option>`)]
+    .join('');
+
   document.getElementById('selAll')!.onclick  = () => { list.querySelectorAll('input').forEach(cb => (cb as HTMLInputElement).checked = true);  applyConfig(); };
   document.getElementById('selNone')!.onclick = () => { list.querySelectorAll('input').forEach(cb => (cb as HTMLInputElement).checked = false); applyConfig(); };
   list.addEventListener('change', applyConfig);
   sel.addEventListener('change', applyConfig);
+  socSel.addEventListener('change', () => { state.socMin = state.socMax = 0; applyConfig(); });
 
   show('configCard');
   applyConfig();

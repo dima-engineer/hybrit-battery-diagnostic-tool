@@ -9,6 +9,11 @@ export interface AppState {
   dataMax:     number;
   fMin:        number;
   fMax:        number;
+  socCol:      string;
+  socDataMin:  number;
+  socDataMax:  number;
+  socMin:      number;
+  socMax:      number;
   sortBars:    boolean;
 }
 
@@ -21,6 +26,11 @@ export const state: AppState = {
   dataMax:     0,
   fMin:        0,
   fMax:        0,
+  socCol:      '',
+  socDataMin:  0,
+  socDataMax:  0,
+  socMin:      0,
+  socMax:      0,
   sortBars:    false,
 };
 

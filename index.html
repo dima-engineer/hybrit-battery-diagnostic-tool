@@ -47,6 +47,8 @@
         <div>
           <div class="field-label">Current Column</div>
           <select id="currentSel"></select>
+          <div class="field-label" style="margin-top:12px">State of Charge Column</div>
+          <select id="socSel"></select>
         </div>
       </div>
     </div>
@@ -55,18 +57,28 @@
   <!-- Filter -->
   <div class="card hidden" id="filterCard">
     <div class="card-head">
-      <span class="card-head-l">🔍 Current filter <span class="badge" id="sampleBadge">0 samples</span></span>
-      <span class="rlabel" id="rangeDisplay">—</span>
+      <span class="card-head-l">🔍 Filter <span class="badge" id="sampleBadge">0 samples</span></span>
     </div>
     <div class="card-body" style="padding:14px 20px">
       <div class="filter-row">
         <span class="rlabel">Current [A]</span>
-        <div class="range-wrap" id="rangeWrap">
+        <div class="range-wrap">
           <div class="range-track"></div>
           <div class="range-fill" id="rangeFill"></div>
           <input type="range" id="sMin">
           <input type="range" id="sMax">
         </div>
+        <span class="rlabel" id="curDisplay">—</span>
+      </div>
+      <div class="filter-row hidden" id="socFilterRow">
+        <span class="rlabel">SoC [%]</span>
+        <div class="range-wrap">
+          <div class="range-track"></div>
+          <div class="range-fill" id="socFill"></div>
+          <input type="range" id="socMin">
+          <input type="range" id="socMax">
+        </div>
+        <span class="rlabel" id="socDisplay">—</span>
       </div>
     </div>
   </div>
