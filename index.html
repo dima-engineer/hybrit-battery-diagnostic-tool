@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battery Diagnostic</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <span style="font-size:1.3rem">🔋</span>
+  <h1>Battery Diagnostic Tool</h1>
+</header>
+
+<div class="wrap">
+
+  <!-- Upload -->
+  <div class="card">
+    <div class="card-body">
+      <div class="drop" id="drop">
+        <div class="drop-icon">📂</div>
+        <p><strong>Click to upload</strong> or drag &amp; drop</p>
+        <p style="margin-top:4px">CSV file with battery diagnostic data</p>
+        <input type="file" id="fileInput" accept=".csv" style="display:none">
+      </div>
+      <div class="file-bar hidden" id="fileBar">
+        <span id="fileName">—</span>
+        <button class="btn btn-ghost" id="changeBtn">Change file</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Configure -->
+  <div class="card hidden" id="configCard">
+    <div class="card-head"><span class="card-head-l">⚙ Configure columns</span></div>
+    <div class="card-body">
+      <div class="cfg-grid">
+        <div>
+          <div class="field-label">Cell Voltage Columns</div>
+          <div class="cb-scroll" id="voltageList"></div>
+          <div class="cb-actions">
+            <button class="btn btn-ghost" id="selAll">Select all</button>
+            <button class="btn btn-ghost" id="selNone">Clear</button>
+          </div>
+        </div>
+        <div>
+          <div class="field-label">Current Column</div>
+          <select id="currentSel"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="card hidden" id="filterCard">
+    <div class="card-head">
+      <span class="card-head-l">🔍 Current filter <span class="badge" id="sampleBadge">0 samples</span></span>
+      <span class="rlabel" id="rangeDisplay">—</span>
+    </div>
+    <div class="card-body" style="padding:14px 20px">
+      <div class="filter-row">
+        <span class="rlabel">Current [A]</span>
+        <div class="range-wrap" id="rangeWrap">
+          <div class="range-track"></div>
+          <div class="range-fill" id="rangeFill"></div>
+          <input type="range" id="sMin">
+          <input type="range" id="sMax">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heatmap -->
+  <div class="card hidden" id="heatCard">
+    <div class="card-head">
+      <span class="card-head-l">📊 Cell Voltage Deviation from Per-Sample Mean</span>
+    </div>
+    <div class="chart-wrap">
+      <div class="no-data hidden" id="heatEmpty">No samples in selected range.</div>
+      <canvas id="heatCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Bar chart -->
+  <div class="card hidden" id="barCard">
+    <div class="card-head">
+      <span class="card-head-l">📈 Per-Cell Mean Voltage</span>
+      <button class="btn btn-ghost" id="sortBtn">Sort by voltage ↑</button>
+    </div>
+    <div class="chart-wrap">
+      <div class="no-data hidden" id="barEmpty">No samples in selected range.</div>
+      <canvas id="barCanvas"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
