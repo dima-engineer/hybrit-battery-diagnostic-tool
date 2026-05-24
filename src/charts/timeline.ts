@@ -5,7 +5,13 @@ const MAX_PTS = 1000;
 const PANEL_H = 90;
 const ML = 56, MR = 20, MT = 14, MB = 32;
 
-interface Series { label: string; color: string; values: number[] }
+interface Series {
+  label:  string;
+  color:  string;
+  values: number[];
+  fLo?:   number;   // lower filter cutoff — draw a dashed line here when active
+  fHi?:   number;   // upper filter cutoff — draw a dashed line here when active
+}
 
 // Each entry is the frame state *before* a zoom — null means "was at full view"
 type ZoomSnapshot = { start: number; end: number } | null;
@@ -41,10 +47,17 @@ function getDisp(rows: Row[]): Row[] {
 
 function buildSeries(disp: Row[]): Series[] {
   const series: Series[] = [];
+
+  // Only show cutoff lines when the filter is actually narrowing the data
+  const curFLo = state.fMin > state.dataMin ? state.fMin : undefined;
+  const curFHi = state.fMax < state.dataMax ? state.fMax : undefined;
+
   series.push({
     label: 'Current [A]', color: '#3b82f6',
     values: disp.map(r => toNum(r[state.curCol])),
+    fLo: curFLo, fHi: curFHi,
   });
+
   if (state.voltageCols.length) {
     series.push({
       label: 'Mean Voltage [V]', color: '#10b981',
@@ -54,12 +67,17 @@ function buildSeries(disp: Row[]): Series[] {
       }),
     });
   }
+
   if (state.socCol) {
+    const socFLo = state.socMin > state.socDataMin ? state.socMin : undefined;
+    const socFHi = state.socMax < state.socDataMax ? state.socMax : undefined;
     series.push({
       label: 'SoC [%]', color: '#f59e0b',
       values: disp.map(r => toNum(r[state.socCol])),
+      fLo: socFLo, fHi: socFHi,
     });
   }
+
   return series;
 }
 
@@ -105,6 +123,20 @@ function drawPanel(ctx: CanvasRenderingContext2D, s: Series, panelY: number, plo
     if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
   });
   ctx.stroke();
+
+  // Filter cutoff lines — dashed red, only drawn when filter is narrowing the data
+  const drawCutoff = (fv: number | undefined) => {
+    if (fv === undefined || !isFinite(fv) || fv < lo || fv > hi) return;
+    const y = toY(fv);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(239,68,68,0.75)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(ML, y); ctx.lineTo(ML + plotW, y); ctx.stroke();
+    ctx.restore();
+  };
+  drawCutoff(s.fLo);
+  drawCutoff(s.fHi);
 }
 
 // ── Brush overlay (drag only — the frame IS the view, no persistent rect) ──

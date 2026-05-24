@@ -1,4 +1,4 @@
-import { state, STEPS } from './state.js';
+import { state, STEPS, type Row } from './state.js';
 import { show, hide } from './utils.js';
 import { render } from './render.js';
 
@@ -51,6 +51,39 @@ function buildSocSlider(): void {
   sMax.value = String(socV2s(state.socMax));
 
   updateSocFill();
+}
+
+// Called when the timeline frame changes — adapts slider ranges to the new view.
+export function rebuildRanges(rows: Row[]): void {
+  const vals = rows.map(r => Number(r[state.curCol])).filter(v => isFinite(v));
+  if (!vals.length) return;
+
+  state.dataMin = Math.min(...vals);
+  state.dataMax = Math.max(...vals);
+  state.fMin    = state.dataMin;
+  state.fMax    = state.dataMax;
+
+  const sMin = document.getElementById('sMin') as HTMLInputElement;
+  const sMax = document.getElementById('sMax') as HTMLInputElement;
+  sMin.value = '0';
+  sMax.value = String(STEPS);
+  updateFill();
+
+  if (state.socCol) {
+    const socVals = rows.map(r => Number(r[state.socCol])).filter(v => isFinite(v));
+    if (socVals.length) {
+      state.socDataMin = Math.min(...socVals);
+      state.socDataMax = Math.max(...socVals);
+      state.socMin     = state.socDataMin;
+      state.socMax     = state.socDataMax;
+
+      const socSMin = document.getElementById('socMin') as HTMLInputElement;
+      const socSMax = document.getElementById('socMax') as HTMLInputElement;
+      socSMin.value = '0';
+      socSMax.value = String(STEPS);
+      updateSocFill();
+    }
+  }
 }
 
 export function buildFilter(): void {

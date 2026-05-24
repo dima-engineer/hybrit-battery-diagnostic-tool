@@ -1,14 +1,19 @@
 import { state } from './state.js';
 import { render } from './render.js';
 import { initUpload } from './upload.js';
-import { initFilter } from './filter.js';
+import { initFilter, rebuildRanges } from './filter.js';
 import { initTimeline }    from './charts/timeline.js';
 import { initPairsTooltip } from './charts/pairs.js';
 import { initBarTooltip }   from './charts/bar.js';
 
 initUpload();
 initFilter();
-initTimeline(render);
+initTimeline(() => {
+  const { frameStart: s, frameEnd: e, allRows } = state;
+  const rows = s !== null && e !== null ? allRows.slice(s, e + 1) : allRows;
+  rebuildRanges(rows);
+  render();
+});
 initPairsTooltip();
 initBarTooltip();
 
