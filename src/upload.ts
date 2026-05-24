@@ -2,6 +2,7 @@ import Papa from 'papaparse';
 import { state, type Row } from './state.js';
 import { show } from './utils.js';
 import { buildConfig } from './config.js';
+import { resetTimelineZoom } from './charts/timeline.js';
 
 function loadFile(file: File): void {
   Papa.parse<Row>(file, {
@@ -9,10 +10,13 @@ function loadFile(file: File): void {
     dynamicTyping: true,
     skipEmptyLines: true,
     complete({ data, meta }) {
-      state.allRows = data;
-      state.columns = meta.fields ?? [];
-      state.fMin    = 0;
-      state.fMax    = 0;
+      state.allRows    = data;
+      state.columns    = meta.fields ?? [];
+      state.fMin       = 0;
+      state.fMax       = 0;
+      state.frameStart = null;
+      state.frameEnd   = null;
+      resetTimelineZoom();
       document.getElementById('fileName')!.textContent =
         `${file.name}  ·  ${data.length.toLocaleString()} rows, ${state.columns.length} columns`;
       show('fileBar');

@@ -83,6 +83,20 @@
     </div>
   </div>
 
+  <!-- Timeline -->
+  <div class="card hidden" id="timelineCard">
+    <div class="card-head">
+      <span class="card-head-l">⏱ Timeline <span class="frame-hint hidden" id="frameHint"></span></span>
+      <div class="card-head-r">
+        <button class="btn btn-ghost hidden" id="zoomOutBtn">← Zoom out</button>
+        <button class="btn btn-ghost hidden" id="clearFrameBtn">⟳ Reset</button>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="timelineCanvas" style="cursor:crosshair"></canvas>
+    </div>
+  </div>
+
   <!-- Heatmap -->
   <div class="card hidden" id="heatCard">
     <div class="card-head">

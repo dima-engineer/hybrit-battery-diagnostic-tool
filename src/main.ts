@@ -2,11 +2,13 @@ import { state } from './state.js';
 import { render } from './render.js';
 import { initUpload } from './upload.js';
 import { initFilter } from './filter.js';
+import { initTimeline }    from './charts/timeline.js';
 import { initPairsTooltip } from './charts/pairs.js';
 import { initBarTooltip }   from './charts/bar.js';
 
 initUpload();
 initFilter();
+initTimeline(render);
 initPairsTooltip();
 initBarTooltip();
 

@@ -14,6 +14,8 @@ export interface AppState {
   socDataMax:  number;
   socMin:      number;
   socMax:      number;
+  frameStart:  number | null;
+  frameEnd:    number | null;
   sortBars:    boolean;
   sortPairs:   boolean;
   sortHeatByCurrent: boolean;
@@ -35,6 +37,8 @@ export const state: AppState = {
   socDataMax:  0,
   socMin:      0,
   socMax:      0,
+  frameStart:  null,
+  frameEnd:    null,
   sortBars:    false,
   sortPairs:   false,
   sortHeatByCurrent: false,
