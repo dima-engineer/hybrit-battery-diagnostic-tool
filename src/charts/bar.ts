@@ -1,5 +1,6 @@
 import { state, type Row } from '../state.js';
 import { mean, stddev, toNum, setCanvas, show, hide } from '../utils.js';
+import { initCanvasTooltip, type HitZone } from '../tooltip.js';
 
 interface CellStats {
   col:  string;
@@ -8,12 +9,24 @@ interface CellStats {
   std:  number;
 }
 
+interface BarHit extends HitZone { name: string; mean: number; std: number }
+let hitZones: BarHit[] = [];
+
+export function initBarTooltip(): void {
+  initCanvasTooltip('barCanvas', () => hitZones, hit => {
+    const mult = state.barStdMult;
+    return `<div class="tt-label">${hit.name}</div>` +
+      `<div>Mean: <strong>${hit.mean.toFixed(4)} V</strong></div>` +
+      `<div>±${mult}σ: <strong>${(hit.std * mult).toFixed(4)} V</strong></div>`;
+  });
+}
+
 export function drawBar(rows: Row[]): void {
   const empty  = document.getElementById('barEmpty')!;
   const canvas = document.getElementById('barCanvas') as HTMLCanvasElement;
   const nC     = state.voltageCols.length;
 
-  if (!rows.length || !nC) { show(empty); hide(canvas); return; }
+  if (!rows.length || !nC) { show(empty); hide(canvas); hitZones = []; return; }
   hide(empty); show(canvas);
 
   let cells: CellStats[] = state.voltageCols.map(c => {
@@ -36,8 +49,8 @@ export function drawBar(rows: Row[]): void {
   const plotW = W - ML - MR;
   const plotH = H - MT - MB;
 
-  // Y scale covers filtered means ± std
-  const ys  = cells.flatMap(c => [c.mean - c.std, c.mean + c.std]);
+  // Y scale covers filtered means ± n·std
+  const ys  = cells.flatMap(c => [c.mean - c.std * state.barStdMult, c.mean + c.std * state.barStdMult]);
   const yLo = Math.min(...ys), yHi = Math.max(...ys);
   const pad = (yHi - yLo) * 0.14 || 0.05;
   const vLo = yLo - pad, vHi = yHi + pad;
@@ -63,9 +76,11 @@ export function drawBar(rows: Row[]): void {
   const barW = plotW / nC;
   const bPad = Math.max(barW * 0.18, 3);
   const yBot = toY(vLo);
+  hitZones = [];
 
   // Bars + error bars
   cells.forEach(({ name, mean: m, std: s }, i) => {
+    hitZones.push({ x: ML + i * barW, w: barW, name, mean: m, std: s });
     const x  = ML + i * barW + bPad;
     const bw = barW - bPad * 2;
     const cx = x + bw / 2;
@@ -73,8 +88,9 @@ export function drawBar(rows: Row[]): void {
     ctx.fillStyle = 'rgba(59,130,246,.72)';
     ctx.fillRect(x, toY(m), bw, yBot - toY(m));
 
-    if (s > 0) {
-      const yH  = toY(m + s), yL = toY(m - s);
+    const spread = s * state.barStdMult;
+    if (spread > 0) {
+      const yH  = toY(m + spread), yL = toY(m - spread);
       const cap = Math.min(bw * 0.4, 5);
       ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(cx, yH); ctx.lineTo(cx, yL); ctx.stroke();

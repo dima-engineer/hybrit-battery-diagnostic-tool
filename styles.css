@@ -59,6 +59,7 @@ header h1 { font-size: 1rem; font-weight: 600; }
   letter-spacing: .05em;
 }
 .card-head-l { display: flex; align-items: center; gap: 8px; }
+.card-head-r { display: flex; align-items: center; gap: 8px; }
 .card-body { padding: 20px; }
 
 /* Upload */
@@ -100,6 +101,11 @@ header h1 { font-size: 1rem; font-weight: 600; }
 .btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
 .btn-ghost:hover { background: var(--bg); color: var(--text); }
 .btn-ghost.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.btn-group { display: flex; }
+.btn-group .btn { border-radius: 0; margin-left: -1px; }
+.btn-group .btn:first-child { border-radius: 6px 0 0 6px; margin-left: 0; }
+.btn-group .btn:last-child  { border-radius: 0 6px 6px 0; }
 
 /* Config */
 .cfg-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; }
@@ -201,3 +207,20 @@ canvas { display: block; width: 100%; }
 .no-data { text-align: center; padding: 48px; color: var(--muted); font-size: .9rem; }
 
 .hidden { display: none !important; }
+
+/* Tooltip */
+.tooltip {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  background: var(--text);
+  color: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 7px;
+  font-size: .8rem;
+  line-height: 1.6;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+.tooltip .tt-label { font-weight: 700; margin-bottom: 2px; }

@@ -15,7 +15,10 @@ export interface AppState {
   socMin:      number;
   socMax:      number;
   sortBars:    boolean;
+  sortPairs:   boolean;
   sortHeatByCurrent: boolean;
+  barStdMult:   1 | 2 | 3;
+  pairsStdMult: 1 | 2 | 3;
 }
 
 export const state: AppState = {
@@ -33,7 +36,10 @@ export const state: AppState = {
   socMin:      0,
   socMax:      0,
   sortBars:    false,
+  sortPairs:   false,
   sortHeatByCurrent: false,
+  barStdMult:   1,
+  pairsStdMult: 1,
 };
 
 export const STEPS         = 2000;

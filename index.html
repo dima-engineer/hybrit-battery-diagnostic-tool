@@ -99,6 +99,14 @@
   <div class="card hidden" id="pairsCard">
     <div class="card-head">
       <span class="card-head-l">⚡ Block Pair Voltage Difference</span>
+      <div class="card-head-r">
+        <button class="btn btn-ghost" id="sortPairsBtn">Sort by delta ↑</button>
+        <div class="btn-group">
+          <button class="btn btn-ghost on" data-pairs-std="1">±1σ</button>
+          <button class="btn btn-ghost"    data-pairs-std="2">±2σ</button>
+          <button class="btn btn-ghost"    data-pairs-std="3">±3σ</button>
+        </div>
+      </div>
     </div>
     <div class="chart-wrap">
       <div class="no-data hidden" id="pairsEmpty">Need at least 2 voltage columns selected.</div>
@@ -110,7 +118,14 @@
   <div class="card hidden" id="barCard">
     <div class="card-head">
       <span class="card-head-l">📈 Per-Cell Mean Voltage</span>
-      <button class="btn btn-ghost" id="sortBtn">Sort by voltage ↑</button>
+      <div class="card-head-r">
+        <button class="btn btn-ghost" id="sortBtn">Sort by voltage ↑</button>
+        <div class="btn-group">
+          <button class="btn btn-ghost on" data-bar-std="1">±1σ</button>
+          <button class="btn btn-ghost"    data-bar-std="2">±2σ</button>
+          <button class="btn btn-ghost"    data-bar-std="3">±3σ</button>
+        </div>
+      </div>
     </div>
     <div class="chart-wrap">
       <div class="no-data hidden" id="barEmpty">No samples in selected range.</div>
@@ -120,6 +135,7 @@
 
 </div>
 
+<div class="tooltip" id="chartTooltip"></div>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
