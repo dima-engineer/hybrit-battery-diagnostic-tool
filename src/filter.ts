@@ -153,4 +153,18 @@ export function initFilter(): void {
       render();
     });
   });
+
+  document.getElementById('trimToggle')!.addEventListener('change', () => {
+    state.trimAnomalies = (document.getElementById('trimToggle') as HTMLInputElement).checked;
+    document.getElementById('thresholdRow')!.style.display = state.trimAnomalies ? 'flex' : 'none';
+    render();
+  });
+
+  document.getElementById('anomalyThreshold')!.addEventListener('input', () => {
+    const val = Number((document.getElementById('anomalyThreshold') as HTMLInputElement).value);
+    if (val >= 1) {
+      state.anomalyThreshold = val;
+      render();
+    }
+  });
 }

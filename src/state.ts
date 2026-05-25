@@ -21,6 +21,8 @@ export interface AppState {
   sortHeatByCurrent: boolean;
   barStdMult:   1 | 2 | 3;
   pairsStdMult: 1 | 2 | 3;
+  trimAnomalies: boolean;
+  anomalyThreshold: number;
 }
 
 export const state: AppState = {
@@ -44,6 +46,8 @@ export const state: AppState = {
   sortHeatByCurrent: false,
   barStdMult:   1,
   pairsStdMult: 1,
+  trimAnomalies: false,
+  anomalyThreshold: 3,
 };
 
 export const STEPS         = 2000;

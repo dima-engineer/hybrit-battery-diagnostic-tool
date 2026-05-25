@@ -1,0 +1,26 @@
+export const state = {
+    allRows: [],
+    columns: [],
+    voltageCols: [],
+    curCol: '',
+    dataMin: 0,
+    dataMax: 0,
+    fMin: 0,
+    fMax: 0,
+    socCol: '',
+    socDataMin: 0,
+    socDataMax: 0,
+    socMin: 0,
+    socMax: 0,
+    frameStart: null,
+    frameEnd: null,
+    sortBars: false,
+    sortPairs: false,
+    sortHeatByCurrent: false,
+    barStdMult: 1,
+    pairsStdMult: 1,
+    trimAnomalies: false,
+    anomalyThreshold: 3,
+};
+export const STEPS = 2000;
+export const MAX_HEAT_ROWS = 400;
